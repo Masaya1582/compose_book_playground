@@ -8,10 +8,16 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Scaffold
@@ -51,44 +57,102 @@ fun Greeting(modifier: Modifier = Modifier) {
        modifier = Modifier
            .fillMaxSize()
    ) {
-       Text(text = "I like Compose", fontSize = 10.sp)
-       Text(text = "I like Compose", fontSize = 20.sp)
-       Text(text = "I like Compose", fontSize = 30.sp)
-       val story = "Today’s ceremony, however, has very special meaning. Because today we are not merely transferring power from one Administration to another, or from one party to another – but we are transferring power from Washington, D.C. and giving it back to you, the American People."
-       Text(text = story)
-       Text(
-           text = story,
-           maxLines = 1,
-           fontWeight = FontWeight.Bold,
-           modifier = Modifier
-               .size(width = 200.dp, height = 100.dp)
-               .background(
-                   Brush.linearGradient(listOf(Color.White, Color.Gray)),
-                   shape = RoundedCornerShape(20.dp)
-               )
-               .border(
-                   width = 1.dp,
-                   color = Color.Black,
-                   shape = RoundedCornerShape(20.dp)
-               )
-               .clickable { println("Text Clicked!") }
-               .padding(10.dp)
-       )
-       ImageSample()
+       Text(text = "Good Morning")
+       Text(text = "Good Afternoon")
+       Text(text = "Good Evening")
+       Text(text = "Good Night")
+       RowImageList()
+       BoxImageSample()
+       ArrangementSample()
    }
 }
 
 @Composable
-private fun ImageSample() {
-    Image(
-        painter = painterResource(id = R.drawable.img_dog),
-        contentDescription = "Sample Image",
-        contentScale = ContentScale.Crop,
-        modifier = Modifier.size(300.dp),
+private fun RowImageList() {
+    Row {
+        Image(
+            painterResource(id = R.drawable.img_dog),
+            contentDescription = "DOG",
+            modifier = Modifier.size(100.dp)
+        )
+        Spacer(modifier = Modifier.width(20.dp))
+        Image(
+            painterResource(id = R.drawable.img_dog),
+            contentDescription = "DOG",
+            modifier = Modifier.size(100.dp)
+        )
+        Spacer(modifier = Modifier.width(20.dp))
+        Image(
+            painterResource(id = R.drawable.img_dog),
+            contentDescription = "DOG",
+            modifier = Modifier.size(100.dp)
+        )
+    }
+}
+
+// @Preview(showBackground = true)
+@Composable
+private fun ArrangementSample() {
+    val imageIdLIst = listOf(
+        R.drawable.img_dog,
+        R.drawable.img_dog,
+        R.drawable.img_dog
     )
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        imageIdLIst.forEach { imageId ->
+            Image(
+                painterResource(id = imageId),
+                contentDescription = "DOG",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(200.dp)
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
+@Composable
+private fun AlignmentSample() {
+    val imageIdLIst = listOf(
+        R.drawable.img_dog,
+        R.drawable.img_dog,
+        R.drawable.img_dog
+    )
+    Row(
+        modifier = Modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        imageIdLIst.forEach { imageId ->
+            Image(
+                painterResource(id = imageId),
+                contentDescription = "DOG",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(100.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun BoxImageSample() {
+    Box {
+        Image(
+            painterResource(id = R.drawable.img_dog),
+            contentDescription = "DOG",
+            modifier = Modifier.size(100.dp)
+        )
+        Text(
+            text = "Hello Dog",
+            color = Color.Black
+        )
+    }
+}
+
+// @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     MyHelloComposeTheme {
