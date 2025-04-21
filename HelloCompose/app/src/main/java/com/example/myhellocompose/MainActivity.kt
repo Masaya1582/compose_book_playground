@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -113,7 +115,7 @@ private fun ArrangementSample() {
     }
 }
 
-@Preview(showBackground = true)
+// @Preview(showBackground = true)
 @Composable
 private fun AlignmentSample() {
     val imageIdLIst = listOf(
@@ -148,6 +150,41 @@ private fun BoxImageSample() {
         Text(
             text = "Hello Dog",
             color = Color.Black
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ColumnRowMixSample() {
+    val imageIdLIst = listOf(
+        R.drawable.img_dog,
+        R.drawable.img_cat,
+        R.drawable.img_hamster
+    )
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            imageIdLIst.forEach { imageId ->
+                Image(
+                    painterResource(id = imageId),
+                    contentDescription = "Multiple Animals",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.size(width = 120.dp, height = 120.dp),
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Cute Animals",
+            fontSize = 24.sp
         )
     }
 }
