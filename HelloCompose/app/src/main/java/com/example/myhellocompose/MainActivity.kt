@@ -88,32 +88,47 @@ private fun AnimalSelection(
     animals: List<Animal>,
     modifier: Modifier = Modifier
 ) {
-    Column {
-        Text(
-            text = "Cute Animals",
-            fontSize = 20.sp
+    var selectedAnimal by remember { mutableStateOf<Animal?>(null) }
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center
+    ) {
+        Message(selectedAnimal = selectedAnimal)
+        AnimalList(
+            animals = animals,
+            onAnimalClick = { selectedAnimal = it }
         )
-        AnimalList(animals = animals)
     }
 }
 
 @Composable
-private fun AnimalList(animals: List<Animal>) {
+private fun AnimalList(
+    animals: List<Animal>,
+    onAnimalClick: (Animal) -> Unit
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier.fillMaxWidth()
     ) {
         for (animal in animals) {
-            AnimalCard(animal = animal)
+            AnimalCard(
+                animal = animal,
+                onClick = onAnimalClick
+            )
         }
     }
 }
 
 @Composable
-private fun AnimalCard(animal: Animal) {
+private fun AnimalCard(
+    animal: Animal,
+    onClick: (Animal) -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(2.dp)
+        modifier = Modifier
+            .padding(2.dp)
+            .clickable { onClick(animal) }
     ) {
         Image(
             painter = painterResource(id = animal.resourceId),
@@ -125,6 +140,21 @@ private fun AnimalCard(animal: Animal) {
             text = animal.name,
             fontSize = 16.sp
         )
+    }
+}
+
+@Composable
+private fun Message(
+    selectedAnimal: Animal?
+) {
+    Column {
+        Text(text = "Select an Image")
+        if (selectedAnimal != null) {
+            Text(
+                text = "${selectedAnimal.name} is selected",
+                fontSize = 20.sp
+            )
+        }
     }
 }
 
