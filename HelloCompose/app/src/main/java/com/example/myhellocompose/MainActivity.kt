@@ -1,6 +1,8 @@
 package com.example.myhellocompose
 
+import android.graphics.drawable.Icon
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -25,10 +27,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -56,7 +61,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyHelloComposeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    OnOffSwitch(
+                    AlertDialogSample(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -66,36 +71,45 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun OnOffSwitch(
+private fun AlertDialogSample(
     modifier: Modifier = Modifier
 ) {
-    var isSwitchOn by remember { mutableStateOf(false) }
-    Row(
-        modifier = Modifier.fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "OFF",
-            style = MaterialTheme.typography.titleLarge
-        )
-        Switch(
-            checked = isSwitchOn,
-            onCheckedChange = { isSwitchOn = !isSwitchOn },
-            modifier = Modifier.padding(horizontal = 4.dp)
-        )
-        Text(
-            text = "ON",
-            style = MaterialTheme.typography.titleLarge
-        )
-    }
-
+    AlertDialog(
+        onDismissRequest = { Log.d("onDismiss", "onDismissRequest is selected") },
+        confirmButton = {
+            TextButton(
+                onClick = { Log.d("confirm", "OK is selected") }
+            ) {
+                Text(text = "OK")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = { Log.d("confirm", "Cacnel is selected") }
+            ) {
+                Text(text = "Cancel")
+            }
+        },
+        icon = {
+            Icon(
+                painter = painterResource(id = R.drawable.info),
+                contentDescription = null,
+                modifier = Modifier.size(width = 24.dp, height = 24.dp)
+            )
+        },
+        title = { Text(text = "Sample Dialog") },
+        text = { Text(text = "This is a compose sample dialog") },
+        containerColor = Color.White,
+        iconContentColor = Color.LightGray,
+        titleContentColor = Color.Black,
+        textContentColor = Color.Gray
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     MyHelloComposeTheme {
-        OnOffSwitch()
+        AlertDialogSample()
     }
 }
