@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -53,7 +54,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyHelloComposeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ScrollSample(
+                    LoopImageList(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -62,205 +63,61 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(modifier: Modifier = Modifier) {
-   Column(
-       modifier = Modifier
-           .fillMaxSize()
-   ) {
-       Text(text = "Good Morning")
-       Text(text = "Good Afternoon")
-       Text(text = "Good Evening")
-       Text(text = "Good Night")
-       RowImageList()
-       BoxImageSample()
-       ArrangementSample()
-   }
-}
+data class Animal(
+    @DrawableRes val resourceId: Int,
+    val name: String
+)
 
 @Composable
-private fun ScrollSample(modifier: Modifier = Modifier) {
-    val scrollState = rememberScrollState()
-    Column(
-        modifier = Modifier.verticalScroll(state = scrollState)
-    ) {
-        for (i in 1..50) {
-            Image(
-                painterResource(id = R.drawable.img_dog),
-                contentDescription = "DOG",
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-        }
-    }
-}
-
-@Composable
-private fun MutableTextField(modifier: Modifier = Modifier) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(12.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        var inputText by remember { mutableStateOf("") }
-
-        Text(
-            text = inputText,
-            fontSize = 24.sp
+private fun LoopImageList(modifier: Modifier = Modifier) {
+    val animals = listOf(
+        Animal(
+            resourceId = R.drawable.img_dog,
+            name = "Dog"
+        ),
+        Animal(
+            resourceId = R.drawable.img_cat,
+            name = "Cat"
+        ),
+        Animal(
+            resourceId = R.drawable.img_hamster,
+            name = "Hamster"
         )
-        TextField(
-            value = inputText,
-            onValueChange = { inputText = it }
-        )
-    }
-}
-
-@Composable
-private fun IncrementCounter(modifier: Modifier = Modifier) {
-    var count by remember { mutableIntStateOf(0) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(12.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "$count",
-            fontSize = 24.sp,
-            modifier = Modifier
-                .clickable { count++ }
-        )
-    }
-}
-
-@Composable
-private fun RowImageList() {
-    Row {
-        Image(
-            painterResource(id = R.drawable.img_dog),
-            contentDescription = "DOG",
-            modifier = Modifier.size(100.dp)
-        )
-        Spacer(modifier = Modifier.width(20.dp))
-        Image(
-            painterResource(id = R.drawable.img_dog),
-            contentDescription = "DOG",
-            modifier = Modifier.size(100.dp)
-        )
-        Spacer(modifier = Modifier.width(20.dp))
-        Image(
-            painterResource(id = R.drawable.img_dog),
-            contentDescription = "DOG",
-            modifier = Modifier.size(100.dp)
-        )
-    }
-}
-
-// @Preview(showBackground = true)
-@Composable
-private fun ArrangementSample() {
-    val imageIdLIst = listOf(
-        R.drawable.img_dog,
-        R.drawable.img_dog,
-        R.drawable.img_dog
     )
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        imageIdLIst.forEach { imageId ->
-            Image(
-                painterResource(id = imageId),
-                contentDescription = "DOG",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(200.dp)
-            )
-        }
-    }
-}
 
-// @Preview(showBackground = true)
-@Composable
-private fun AlignmentSample() {
-    val imageIdLIst = listOf(
-        R.drawable.img_dog,
-        R.drawable.img_dog,
-        R.drawable.img_dog
-    )
     Row(
-        modifier = Modifier.fillMaxSize(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier.fillMaxWidth()
     ) {
-        imageIdLIst.forEach { imageId ->
-            Image(
-                painterResource(id = imageId),
-                contentDescription = "DOG",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(100.dp)
-            )
+        for (animal in animals) {
+            AnimalCard(animal = animal)
         }
     }
 }
 
 @Composable
-private fun BoxImageSample() {
-    Box {
+private fun AnimalCard(animal: Animal) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(2.dp)
+    ) {
         Image(
-            painterResource(id = R.drawable.img_dog),
-            contentDescription = "DOG",
-            modifier = Modifier.size(100.dp)
+            painter = painterResource(id = animal.resourceId),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.size(width = 80.dp, height = 80.dp)
         )
         Text(
-            text = "Hello Dog",
-            color = Color.Black
+            text = animal.name,
+            fontSize = 16.sp
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun ColumnRowMixSample() {
-    val imageIdLIst = listOf(
-        R.drawable.img_dog,
-        R.drawable.img_cat,
-        R.drawable.img_hamster
-    )
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            imageIdLIst.forEach { imageId ->
-                Image(
-                    painterResource(id = imageId),
-                    contentDescription = "Multiple Animals",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.size(width = 120.dp, height = 120.dp),
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Cute Animals",
-            fontSize = 24.sp
-        )
-    }
-}
-
-// @Preview(showBackground = true)
-@Composable
 fun GreetingPreview() {
     MyHelloComposeTheme {
-        Greeting()
+        LoopImageList()
     }
 }
