@@ -25,7 +25,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -54,22 +56,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyHelloComposeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val animals = listOf(
-                        Animal(
-                            resourceId = R.drawable.img_dog,
-                            name = "Dog"
-                        ),
-                        Animal(
-                            resourceId = R.drawable.img_cat,
-                            name = "Cat"
-                        ),
-                        Animal(
-                            resourceId = R.drawable.img_hamster,
-                            name = "Hamster"
-                        )
-                    )
-                    AnimalSelection(
-                        animals = animals,
+                    OnOffSwitch(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -78,104 +65,37 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-data class Animal(
-    @DrawableRes val resourceId: Int,
-    val name: String
-)
-
 @Composable
-private fun AnimalSelection(
-    animals: List<Animal>,
+private fun OnOffSwitch(
     modifier: Modifier = Modifier
 ) {
-    var selectedAnimal by remember { mutableStateOf<Animal?>(null) }
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center
-    ) {
-        Message(selectedAnimal = selectedAnimal)
-        AnimalList(
-            animals = animals,
-            onAnimalClick = { selectedAnimal = it }
-        )
-    }
-}
-
-@Composable
-private fun AnimalList(
-    animals: List<Animal>,
-    onAnimalClick: (Animal) -> Unit
-) {
+    var isSwitchOn by remember { mutableStateOf(false) }
     Row(
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxSize(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
     ) {
-        for (animal in animals) {
-            AnimalCard(
-                animal = animal,
-                onClick = onAnimalClick
-            )
-        }
-    }
-}
-
-@Composable
-private fun AnimalCard(
-    animal: Animal,
-    onClick: (Animal) -> Unit
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .padding(2.dp)
-            .clickable { onClick(animal) }
-    ) {
-        Image(
-            painter = painterResource(id = animal.resourceId),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.size(width = 80.dp, height = 80.dp)
+        Text(
+            text = "OFF",
+            style = MaterialTheme.typography.titleLarge
+        )
+        Switch(
+            checked = isSwitchOn,
+            onCheckedChange = { isSwitchOn = !isSwitchOn },
+            modifier = Modifier.padding(horizontal = 4.dp)
         )
         Text(
-            text = animal.name,
-            fontSize = 16.sp
+            text = "ON",
+            style = MaterialTheme.typography.titleLarge
         )
     }
-}
 
-@Composable
-private fun Message(
-    selectedAnimal: Animal?
-) {
-    Column {
-        Text(text = "Select an Image")
-        if (selectedAnimal != null) {
-            Text(
-                text = "${selectedAnimal.name} is selected",
-                fontSize = 20.sp
-            )
-        }
-    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     MyHelloComposeTheme {
-        val animals = listOf(
-            Animal(
-                resourceId = R.drawable.img_dog,
-                name = "Dog"
-            ),
-            Animal(
-                resourceId = R.drawable.img_cat,
-                name = "Cat"
-            ),
-            Animal(
-                resourceId = R.drawable.img_hamster,
-                name = "Hamster"
-            )
-        )
-        AnimalSelection(animals = animals)
+        OnOffSwitch()
     }
 }
