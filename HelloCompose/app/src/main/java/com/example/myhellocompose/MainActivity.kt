@@ -54,7 +54,22 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyHelloComposeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LoopImageList(
+                    val animals = listOf(
+                        Animal(
+                            resourceId = R.drawable.img_dog,
+                            name = "Dog"
+                        ),
+                        Animal(
+                            resourceId = R.drawable.img_cat,
+                            name = "Cat"
+                        ),
+                        Animal(
+                            resourceId = R.drawable.img_hamster,
+                            name = "Hamster"
+                        )
+                    )
+                    AnimalSelection(
+                        animals = animals,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -69,22 +84,21 @@ data class Animal(
 )
 
 @Composable
-private fun LoopImageList(modifier: Modifier = Modifier) {
-    val animals = listOf(
-        Animal(
-            resourceId = R.drawable.img_dog,
-            name = "Dog"
-        ),
-        Animal(
-            resourceId = R.drawable.img_cat,
-            name = "Cat"
-        ),
-        Animal(
-            resourceId = R.drawable.img_hamster,
-            name = "Hamster"
+private fun AnimalSelection(
+    animals: List<Animal>,
+    modifier: Modifier = Modifier
+) {
+    Column {
+        Text(
+            text = "Cute Animals",
+            fontSize = 20.sp
         )
-    )
+        AnimalList(animals = animals)
+    }
+}
 
+@Composable
+private fun AnimalList(animals: List<Animal>) {
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier.fillMaxWidth()
@@ -118,6 +132,20 @@ private fun AnimalCard(animal: Animal) {
 @Composable
 fun GreetingPreview() {
     MyHelloComposeTheme {
-        LoopImageList()
+        val animals = listOf(
+            Animal(
+                resourceId = R.drawable.img_dog,
+                name = "Dog"
+            ),
+            Animal(
+                resourceId = R.drawable.img_cat,
+                name = "Cat"
+            ),
+            Animal(
+                resourceId = R.drawable.img_hamster,
+                name = "Hamster"
+            )
+        )
+        AnimalSelection(animals = animals)
     }
 }
